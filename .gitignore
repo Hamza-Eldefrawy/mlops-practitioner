@@ -1,3 +1,8 @@
+# models and Data
+models/*.pkl
+models/*.onnx
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
