@@ -1,15 +1,19 @@
+from pathlib import Path
+
 import pandas as pd
-from . import config as cfg
 
-def read_data(path: str) -> pd.DataFrame:
-  df = pd.read_parquet(path)
-  return df
 
-def prepare_features(df: pd.DataFrame) -> pd.DataFrame:
-  df = df.copy()
-  df['duration'] = (df['lpep_dropoff_datetime'] - df['lpep_pickup_datetime']).dt.total_seconds() / 60
-  df = df[(df['duration'] >= cfg.MIN_TRIP_DURATION) & (df['duration'] <= cfg.MAX_TRIP_DURATION)].copy()
-  df['PULocationID'] = df['PULocationID'].astype(str)
-  df['DOLocationID'] = df['DOLocationID'].astype(str)
-  df['PU_DO'] = df['PULocationID'] + '_' + df['DOLocationID']
-  return df
+def read_data(path: Path) -> pd.DataFrame:
+    """Reads a Parquet file into a Pandas DataFrame."""
+    return pd.read_parquet(path)
+
+
+def split_data(
+    df: pd.DataFrame, split_ratio: float
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Splits the dataset sequentially based on the provided ratio."""
+    train_size = int(split_ratio * len(df))
+    df_train = df.iloc[:train_size].copy()
+    df_val = df.iloc[train_size:].copy()
+
+    return df_train, df_val
