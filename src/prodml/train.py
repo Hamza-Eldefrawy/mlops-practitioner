@@ -7,6 +7,9 @@ from sklearn.metrics import mean_absolute_error, root_mean_squared_error
 
 from prodml import data, features
 from prodml.config import config
+from prodml.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 def train_model(df_train: pd.DataFrame, df_val: pd.DataFrame) -> tuple:
@@ -47,12 +50,15 @@ def main():
     # 4. Train Model
     model, dv, mae, rmse = train_model(df_train, df_val)
 
-    print(f"Validation MAE:  {mae:.4f}")
-    print(f"Validation RMSE: {rmse:.4f}")
+    logger.info(
+        "Model training completed", extra={"mae": round(mae, 4), "rmse": round(rmse, 4)}
+    )
 
     # 5. Save Artifact
     save_model(model, dv)
-    print(f"Model saved to {config.output_model_path}")
+    logger.info(
+        "Model artifact saved", extra={"model_path": str(config.output_model_path)}
+    )
 
 
 if __name__ == "__main__":

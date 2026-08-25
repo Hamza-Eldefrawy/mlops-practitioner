@@ -5,6 +5,9 @@ from pathlib import Path
 from typing import Any
 
 from prodml.config import config
+from prodml.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 # 1. The Decorator: Measures how long a function takes to execute
@@ -15,8 +18,13 @@ def timed(func):
         result = func(*args, **kwargs)
         end_time = time.perf_counter()
 
-        # will replace this print with structured JSON logging
-        print(f"[{func.__name__}] executed in {end_time - start_time:.4f} seconds")
+        logger.info(
+            "Function executed",
+            extra={
+                "function_name": func.__name__,
+                "latency_seconds": round(end_time - start_time, 4),
+            },
+        )
 
         return result
 
