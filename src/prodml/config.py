@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     data_dir: Path = BASE_DIR / "data"
     models_dir: Path = BASE_DIR / "models"
     output_model_path: Path = BASE_DIR / "models" / "model.pkl"
+    output_onnx_path: Path = BASE_DIR / "models" / "model.onnx"
     data_path: Path = BASE_DIR / "data" / "green_tripdata_2023-01.parquet"
 
     # Data Constants
