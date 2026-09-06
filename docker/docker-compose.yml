@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/prodml-api:0.1.0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/app/models
+    environment:
+      - MODEL_PATH=/app/models/model.pkl 
+    restart: unless-stopped
